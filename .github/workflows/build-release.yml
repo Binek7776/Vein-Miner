@@ -1,0 +1,39 @@
+name: Build and Release Plugin
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build Plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: plugin-build-${{ github.run_number }}
+          name: VeinMiner Plugin Build ${{ github.run_number }}
+          body: Plugin built from workflow ${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload JAR to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/*.jar
