@@ -1,0 +1,6 @@
+name: VeinMinerStatPlugin
+version: 1.0
+main: com.bibek.veinminerstat.Main
+api-version: 1.21
+author: Bibek
+depend: [VeinMiner]
